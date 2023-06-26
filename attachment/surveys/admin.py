@@ -6,6 +6,7 @@ class QuestionInline(admin.TabularInline):
     model = Survey.questions.through
     extra = 1
 
+
 class SurveyTranslationInline(admin.TabularInline):
     model = SurveyTranslation
     extra = 1
@@ -18,7 +19,7 @@ class QuestionTranslationInline(admin.TabularInline):
 @admin.register(Survey)
 class SurveyAdmin(admin.ModelAdmin):
     inlines = [SurveyTranslationInline, QuestionInline]
-    exclude = ('questions',)  # Exclude questions field from the main form
+    exclude = ("questions",)  # Exclude questions field from the main form
 
 
 @admin.register(SurveyTranslation)
@@ -27,18 +28,18 @@ class SurveyTranslationAdmin(admin.ModelAdmin):
 
 
 class QuestionTranslationAdmin(admin.ModelAdmin):
-    list_display = ('question_prompt', 'language')
-    list_filter = ('language',)
-    search_fields = ('question_prompt',)
+    list_display = ("question_prompt", "language")
+    list_filter = ("language",)
+    search_fields = ("question_prompt",)
 
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [QuestionTranslationInline]
-    list_display = ('question_type', 'order')
-    list_filter = ('question_type',)
-    search_fields = ('question_type',)
-    exclude = ('survey',)
+    list_display = ("question_type", "order")
+    list_filter = ("question_type",)
+    search_fields = ("question_type",)
+    exclude = ("survey",)
 
 
 @admin.register(QuestionTranslation)
@@ -48,6 +49,6 @@ class QuestionTranslationAdmin(QuestionTranslationAdmin):
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ('survey', 'get_answers')
-    list_filter = ('survey',)
-    search_fields = ('survey',)
+    list_display = ("survey", "get_answers")
+    list_filter = ("survey",)
+    search_fields = ("survey",)

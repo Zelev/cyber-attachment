@@ -6,7 +6,7 @@ from .views import SurveyView, SubmitSurveyView
 
 
 urlpatterns = [
-    path('<slug:slug>/', SurveyView.as_view(), name='survey'),
-    path('submit/', SubmitSurveyView.as_view(), name='submit_survey'),
+    path("<slug:slug>/", SurveyView.as_view(), name="survey"),
+    path("submit/", SubmitSurveyView.as_view(), name="submit_survey"),
     # Add other URLs as needed
 ]

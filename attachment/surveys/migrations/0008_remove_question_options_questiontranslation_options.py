@@ -5,18 +5,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('surveys', '0007_question_options'),
-    ]
+    dependencies = [("surveys", "0007_question_options")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='question',
-            name='options',
-        ),
+        migrations.RemoveField(model_name="question", name="options"),
         migrations.AddField(
-            model_name='questiontranslation',
-            name='options',
+            model_name="questiontranslation",
+            name="options",
             field=models.JSONField(blank=True, default=dict, null=True),
         ),
     ]

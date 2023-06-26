@@ -8,48 +8,111 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Survey',
+            name="Survey",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
-            name='Question',
+            name="Question",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('question_type', models.CharField(choices=[('text', 'Text'), ('single_select', 'Single Select'), ('multiple_select', 'Multiple Select'), ('likert_5', 'likert_5'), ('likert_7', 'likert_7'), ('number', 'number')], max_length=60)),
-                ('order', models.IntegerField()),
-                ('survey', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='questions', to='surveys.survey')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "question_type",
+                    models.CharField(
+                        choices=[
+                            ("text", "Text"),
+                            ("single_select", "Single Select"),
+                            ("multiple_select", "Multiple Select"),
+                            ("likert_5", "likert_5"),
+                            ("likert_7", "likert_7"),
+                            ("number", "number"),
+                        ],
+                        max_length=60,
+                    ),
+                ),
+                ("order", models.IntegerField()),
+                (
+                    "survey",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="questions",
+                        to="surveys.survey",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='SurveyTranslation',
+            name="SurveyTranslation",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('language', models.CharField(max_length=10)),
-                ('question_prompt', models.TextField()),
-                ('survey', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='surveys.survey')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("language", models.CharField(max_length=10)),
+                ("question_prompt", models.TextField()),
+                (
+                    "survey",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="surveys.survey"
+                    ),
+                ),
             ],
-            options={
-                'unique_together': {('survey', 'language')},
-            },
+            options={"unique_together": {("survey", "language")}},
         ),
         migrations.CreateModel(
-            name='QuestionTranslation',
+            name="QuestionTranslation",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('language', models.CharField(choices=[('es', 'Spanish'), ('en', 'English')], max_length=60)),
-                ('question_prompt', models.TextField()),
-                ('survey_question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='surveys.question')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "language",
+                    models.CharField(
+                        choices=[("es", "Spanish"), ("en", "English")], max_length=60
+                    ),
+                ),
+                ("question_prompt", models.TextField()),
+                (
+                    "survey_question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="surveys.question",
+                    ),
+                ),
             ],
-            options={
-                'unique_together': {('survey_question', 'language')},
-            },
+            options={"unique_together": {("survey_question", "language")}},
         ),
     ]

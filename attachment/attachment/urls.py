@@ -20,11 +20,8 @@ from django.urls import include, path
 from django.conf.urls.i18n import i18n_patterns
 
 
-urlpatterns = [
-      path('admin/', admin.site.urls),
-    ]
+urlpatterns = [path("admin/", admin.site.urls)]
 
 urlpatterns += i18n_patterns(
-  path('surveys/', include('surveys.urls')),
-  prefix_default_language=True,
+    path("surveys/", include("surveys.urls")), prefix_default_language=True
 )

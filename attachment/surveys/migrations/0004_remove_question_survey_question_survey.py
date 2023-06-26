@@ -5,18 +5,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('surveys', '0003_remove_survey_title_and_more'),
-    ]
+    dependencies = [("surveys", "0003_remove_survey_title_and_more")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='question',
-            name='survey',
-        ),
+        migrations.RemoveField(model_name="question", name="survey"),
         migrations.AddField(
-            model_name='question',
-            name='survey',
-            field=models.ManyToManyField(related_name='questions', to='surveys.survey'),
+            model_name="question",
+            name="survey",
+            field=models.ManyToManyField(related_name="questions", to="surveys.survey"),
         ),
     ]

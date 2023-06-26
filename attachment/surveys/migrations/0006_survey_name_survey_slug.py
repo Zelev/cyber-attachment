@@ -5,21 +5,19 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('surveys', '0005_question_name'),
-    ]
+    dependencies = [("surveys", "0005_question_name")]
 
     operations = [
         migrations.AddField(
-            model_name='survey',
-            name='name',
-            field=models.CharField(default='default', max_length=60),
+            model_name="survey",
+            name="name",
+            field=models.CharField(default="default", max_length=60),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='survey',
-            name='slug',
-            field=models.SlugField(default='def', max_length=60, unique=True),
+            model_name="survey",
+            name="slug",
+            field=models.SlugField(default="def", max_length=60, unique=True),
             preserve_default=False,
         ),
     ]

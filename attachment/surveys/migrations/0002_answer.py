@@ -6,17 +6,28 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('surveys', '0001_initial'),
-    ]
+    dependencies = [("surveys", "0001_initial")]
 
     operations = [
         migrations.CreateModel(
-            name='Answer',
+            name="Answer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answers', models.JSONField(default=dict)),
-                ('survey', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='surveys.survey')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("answers", models.JSONField(default=dict)),
+                (
+                    "survey",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="surveys.survey"
+                    ),
+                ),
             ],
-        ),
+        )
     ]
