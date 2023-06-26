@@ -1,0 +1,64 @@
+<!-- survey.html -->
+{% extends 'base.html' %}
+
+{% block title %}Survey{% endblock %}
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/survey.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container survey-wrapper">
+    <h1 class="survey-title">{{ survey.name }}</h1>
+
+    <form action="{% url 'submit_survey' %}" method="post" class="container">
+        {% csrf_token %}
+        <input type="hidden" name="language" value="{{ LANGUAGE_CODE }}">
+        <div class="row">
+            <div class="input-field col s12">
+                {% for question in survey.questions.all %}
+                    {% if question.questiontranslation_set.all %}
+                        {% for question_translation in question.questiontranslation_set.all %}
+                            {% if question_translation.language == LANGUAGE_CODE %}
+                                {% with options=question_translation.options %}
+                                    <p>{{ question_translation.question_prompt }}</p>
+                                    {% if question.question_type == 'text' %}
+                                        <input type="text" name="question_{{ question.id }}" required>
+                                    {% elif question.question_type == 'multiple_select' %}
+                                        <div class="option-container">
+                                                {% for option in options %}
+                                                    <label>
+                                                        <input type="checkbox" name="question_{{ question.id }}" value="{{ option.value }}">
+                                                        <span>{{ option.label }}</span>
+                                                    </label>
+                                                {% endfor %}
+                                        </div>
+                                        <br>
+                                    {% elif question.question_type == 'number' %}
+                                        <input type="number" name="question_{{ question.id }}" required>
+                                    {% else %}
+                                        <div class="option-container">
+                                                {% for option in options %}
+                                                    <label>
+                                                        <input type="radio" name="question_{{ question.id }}" value="{{ option.value }}">
+                                                        <span>{{ option.label }}</span>
+                                                    </label>
+                                                {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    <br><br>
+                                {% endwith %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                <div class="row">
+                    <div class="input-field col s12">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

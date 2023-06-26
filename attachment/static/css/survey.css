@@ -1,0 +1,51 @@
+.survey-wapper {
+    margin: 1em auto;
+    max-width: 800px;
+    width: 95%;
+    font: 18px/1.5 sans-serif;
+    text-align: center;
+}
+
+.survey-title {
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+.option-container {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 768px) {
+    .option-container {
+        flex-direction: row;
+    }
+}
+
+.option-container label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+    .option-container label {
+        margin-right: 10px;
+    }
+}
+
+.option-container input[type="radio"] {
+    order: 1;
+}
+
+.option-container span {
+    order: 2;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Center labels vertically */
+.option-container label span {
+    display: flex;
+    align-items: center;
+}
