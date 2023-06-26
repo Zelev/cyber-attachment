@@ -89,6 +89,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
             conn_health_checks=True,
         ),
     }
+    
 else:
     DATABASES = {
         "default": {
@@ -151,3 +152,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import django_heroku
 django_heroku.settings(locals())
+del DATABASES['default']['OPTIONS']['sslmode'] 
