@@ -34,7 +34,7 @@
                                     {% if question.question_type == 'text' %}
                                         <input type="text" name="question_{{ question.name }}" required>
                                     {% elif question.question_type == 'prompt' %}
-                                        <p>{{ question_translation.question_prompt }}</p>
+                                        <br>
                                     {% elif question.question_type == 'multiple_select' %}
                                         <div class="option-container">
                                                 {% for option in options %}

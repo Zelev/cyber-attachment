@@ -14,6 +14,7 @@ class SurveyTranslationInline(admin.TabularInline):
 
 class QuestionTranslationInline(admin.TabularInline):
     model = QuestionTranslation
+    extra = 1
 
 
 @admin.register(Survey)

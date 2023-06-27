@@ -30,6 +30,7 @@ class Survey(models.Model):
         super().save(*args, **kwargs)
 
 
+
 class SurveyTranslation(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
     language = models.CharField(max_length=60, choices=LanguageEnum.choices())
@@ -64,6 +65,9 @@ class Question(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ["order"]
 
 
 class QuestionTranslation(models.Model):
