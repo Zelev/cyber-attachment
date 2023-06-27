@@ -9,9 +9,18 @@
 
 {% block content %}
 <div class="container survey-wrapper">
-    <h1 class="survey-title">{{ survey.name }}</h1>
+    {% if survey.surveytranslation_set.all %}
+        {% for survey_translation in survey.surveytranslation_set.all %}
+            {% if survey_translation.language == LANGUAGE_CODE %}
+                <h1 class="survey-title">{{survey_translation.title}}</h1>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <h1 class="survey-title">{{survey.name}}</h1>
+    {% endif %}
 
-    <form action="{% url 'submit_survey' %}" method="post" class="container">
+
+    <form action="{{ request.get_full_path }}" method="post" class="container">
         {% csrf_token %}
         <input type="hidden" name="language" value="{{ LANGUAGE_CODE }}">
         <div class="row">
@@ -23,24 +32,26 @@
                                 {% with options=question_translation.options %}
                                     <p>{{ question_translation.question_prompt }}</p>
                                     {% if question.question_type == 'text' %}
-                                        <input type="text" name="question_{{ question.id }}" required>
+                                        <input type="text" name="question_{{ question.name }}" required>
+                                    {% elif question.question_type == 'prompt' %}
+                                        <p>{{ question_translation.question_prompt }}</p>
                                     {% elif question.question_type == 'multiple_select' %}
                                         <div class="option-container">
                                                 {% for option in options %}
                                                     <label>
-                                                        <input type="checkbox" name="question_{{ question.id }}" value="{{ option.value }}">
+                                                        <input type="checkbox" name="question_{{ question.name }}" value="{{ option.value }}">
                                                         <span>{{ option.label }}</span>
                                                     </label>
                                                 {% endfor %}
                                         </div>
                                         <br>
                                     {% elif question.question_type == 'number' %}
-                                        <input type="number" name="question_{{ question.id }}" required>
+                                        <input type="number" name="question_{{ question.name }}" required>
                                     {% else %}
                                         <div class="option-container">
                                                 {% for option in options %}
                                                     <label>
-                                                        <input type="radio" name="question_{{ question.id }}" value="{{ option.value }}">
+                                                        <input type="radio" name="question_{{ question.name }}" value="{{ option.value }}">
                                                         <span>{{ option.label }}</span>
                                                     </label>
                                                 {% endfor %}

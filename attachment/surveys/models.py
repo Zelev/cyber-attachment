@@ -46,6 +46,7 @@ class Question(models.Model):
     LIKERT_5 = "likert_5"
     LIKERT_7 = "likert_7"
     NUMBER = "number"
+    PROMPT = "prompt"
 
     QUESTION_TYPES = [
         (TEXT, "Text"),
@@ -54,6 +55,7 @@ class Question(models.Model):
         (LIKERT_5, "likert_5"),
         (LIKERT_7, "likert_7"),
         (NUMBER, "number"),
+        (PROMPT, "prompt")
     ]
     name = models.CharField(max_length=60)
     survey = models.ManyToManyField(Survey, related_name="questions")
@@ -80,6 +82,7 @@ class QuestionTranslation(models.Model):
 class Answer(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
     answers = models.JSONField(default=dict)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def set_answers(self, answers):
         self.answers = json.dumps(answers)

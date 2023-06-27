@@ -22,7 +22,6 @@ class SurveyAdmin(admin.ModelAdmin):
     exclude = ("questions",)  # Exclude questions field from the main form
 
 
-@admin.register(SurveyTranslation)
 class SurveyTranslationAdmin(admin.ModelAdmin):
     pass
 
@@ -42,13 +41,12 @@ class QuestionAdmin(admin.ModelAdmin):
     exclude = ("survey",)
 
 
-@admin.register(QuestionTranslation)
 class QuestionTranslationAdmin(QuestionTranslationAdmin):
     pass
 
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ("survey", "get_answers")
+    list_display = ("survey", "get_answers", "created_at")
     list_filter = ("survey",)
     search_fields = ("survey",)

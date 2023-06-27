@@ -162,4 +162,4 @@ cython_debug/
 */db.sqlite3
 
 # ignore static files collected by Django.
-/staticfiles
+staticfiles/
