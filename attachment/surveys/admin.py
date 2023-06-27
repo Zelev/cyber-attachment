@@ -35,9 +35,9 @@ class QuestionTranslationAdmin(admin.ModelAdmin):
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [QuestionTranslationInline]
-    list_display = ("question_type", "order")
-    list_filter = ("question_type",)
-    search_fields = ("question_type",)
+    list_display = ("name", "question_type", "order")
+    list_filter = ("question_type","name")
+    search_fields = ("question_type","name")
     exclude = ("survey",)
 
 
