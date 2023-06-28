@@ -39,3 +39,6 @@ nav {
     background-color: #fff !important;
   }
   
+  .hide {
+    display: none;
+  }

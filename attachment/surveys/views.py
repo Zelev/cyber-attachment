@@ -23,7 +23,6 @@ class SurveyView(View):
 
         # Retrieve the answers for each question from the request
         answers = {}
-
         for key, value in request.POST.items():
             if key.startswith("question_") or key in ["language"]:
                 question_id = key.replace("question_", "")

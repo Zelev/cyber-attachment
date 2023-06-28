@@ -62,6 +62,7 @@ class Question(models.Model):
     survey = models.ManyToManyField(Survey, related_name="questions")
     question_type = models.CharField(max_length=60, choices=QUESTION_TYPES)
     order = models.IntegerField()
+    hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
