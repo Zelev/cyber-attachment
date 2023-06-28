@@ -42,7 +42,7 @@ function hideGADS() {
       });
     for (var i = 0; i < hiddenElements.length; i++) {
         hiddenDivs[i].classList.add("hide");
-        hiddenElements[i].value = "";
+        hiddenElements[i].checked = false;
     }
 }
 
