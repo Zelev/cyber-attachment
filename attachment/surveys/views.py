@@ -10,8 +10,19 @@ FILE_PATH = os.path.dirname(os.path.abspath(__file__))
 
 class SurveyView(View):
     def get(self, request, slug):
-        print(slug)
         survey = get_object_or_404(Survey, slug=slug)
+        questions = []
+        for question in survey.questions.all():
+            question_class = False
+            for translation in question.questiontranslation_set.all():
+                for option in translation.options:
+                    if len(option['label']) > 30:
+                        question_class = True
+                        break
+            question.long_text = question_class
+            questions.append(question)
+        survey.checked_questions = questions
+    
         return render(request, f"{FILE_PATH}/templates/survey.html", {"survey": survey})
     
     def post(self, request, slug):

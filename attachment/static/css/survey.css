@@ -16,6 +16,10 @@
     flex-direction: column;
 }
 
+.block-label {
+    display: block;
+}
+
 @media (min-width: 768px) {
     .option-container {
         flex-direction: row;
