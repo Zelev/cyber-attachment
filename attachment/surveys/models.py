@@ -1,5 +1,6 @@
 import json
 from enum import Enum
+import uuid
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -48,6 +49,7 @@ class Question(models.Model):
     LIKERT_7 = "likert_7"
     NUMBER = "number"
     PROMPT = "prompt"
+    RECORDING = "recording"
 
     QUESTION_TYPES = [
         (TEXT, "Text"),
@@ -56,7 +58,8 @@ class Question(models.Model):
         (LIKERT_5, "likert_5"),
         (LIKERT_7, "likert_7"),
         (NUMBER, "number"),
-        (PROMPT, "prompt")
+        (PROMPT, "prompt"),
+        (RECORDING, "recording")
     ]
     name = models.CharField(max_length=60)
     survey = models.ManyToManyField(Survey, related_name="questions")
@@ -94,3 +97,30 @@ class Answer(models.Model):
 
     def get_answers(self):
         return json.loads(self.answers)
+
+
+class Recording(models.Model):
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, null=True, blank=True)
+    recording = models.FileField(upload_to="recordings/")
+    language = models.CharField(max_length=60, choices=LanguageEnum.choices())
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+
+    class Meta:
+        verbose_name = "Record"
+        verbose_name_plural = "Records"
+
+    def __str__(self):
+        return str(self.recording)
+    
+    def get_absolute_url(self):
+        return self.recording.url
+    
+    def get_recording_name(self):
+        return self.recording.name.split("/")[-1]
+    
+    def get_recording_size(self):
+        return self.recording.size
+    
+    def get_recording_type(self):
+        return self.recording.content_type
+    

@@ -20,13 +20,16 @@
     {% endif %}
 
 
-    <form action="{{ request.get_full_path }}" method="post" class="container">
+    <form action="{{ request.get_full_path }}" method="post" class="container" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="language" value="{{ LANGUAGE_CODE }}">
         <div class="row">
             <div class="input-field col s12">
-                {% for question in survey.questions.all %}
-                    <div class="question-container {% if question.hidden %}hide hiddable{% endif %}"  >
+                {% for question in survey.checked_questions %}
+                    <div class="question-container {% if question.hidden %}hide hiddable{% endif %}">
+                    {% if question.image %}
+                        <img src="{{ question.image.url }}" alt="{{ question.image.name }}">
+                    {% endif %}
                     {% if question.questiontranslation_set.all %}
                         {% for question_translation in question.questiontranslation_set.all %}
                             {% if question_translation.language == LANGUAGE_CODE %}
@@ -37,25 +40,31 @@
                                     {% elif question.question_type == 'prompt' %}
                                         <br>
                                     {% elif question.question_type == 'multiple_select' %}
-                                        <div class="option-container">
-                                                {% for option in options %}
-                                                    <label>
-                                                        <input type="checkbox" name="question_{{ question.name }}" value="{{ option.value }}">
-                                                        <span>{{ option.label }}</span>
-                                                    </label>
-                                                {% endfor %}
+                                        <div class="option-container {% if question.long_text %}block-label{% endif %}">
+                                            {% for option in options %}
+                                                <label {% if question.long_text %}class="block-label"{% endif %}>
+                                                    <input type="checkbox" name="question_{{ question.name }}" value="{{ option.value }}">
+                                                    <span>{{ option.label }}</span>
+                                                    {{ option.label|length }}
+                                                </label>
+                                            {% endfor %}
                                         </div>
                                         <br>
                                     {% elif question.question_type == 'number' %}
                                         <input type="number" name="question_{{ question.name }}" required>
+                                    {% elif question.question_type == 'recording' %}
+                                        <button id="startButton">Start Recording</button>
+                                        <button id="stopButton" disabled>Stop Recording</button>
+                                        <audio id="audioPlayer" controls></audio>
+                                        <input type="hidden" id="audioBlob_{{question.name}}" name="audio_{{question.name}}">
                                     {% else %}
-                                        <div class="option-container">
-                                                {% for option in options %}
-                                                    <label>
-                                                        <input type="radio" name="question_{{ question.name }}" value="{{ option.value }}">
-                                                        <span>{{ option.label }}</span>
-                                                    </label>
-                                                {% endfor %}
+                                        <div class="option-container{% if question.long_text %}block-label{% endif %}">
+                                            {% for option in options %}
+                                                <label {% if question.long_text %}class="block-label"{% endif %}>
+                                                    <input type="radio" name="question_{{ question.name }}" value="{{ option.value }}">
+                                                    <span>{{ option.label }}</span>
+                                                </label>
+                                            {% endfor %}
                                         </div>
                                     {% endif %}
                                     <br><br>

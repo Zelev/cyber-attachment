@@ -51,3 +51,68 @@ var gadsElements = document.querySelectorAll('input[name*="GADS"]');
 for (var i = 0; i < gadsElements.length; i++) {
   gadsElements[i].addEventListener("click", showGADS);
 }
+
+const startButton = document.getElementById('startButton');
+const stopButton = document.getElementById('stopButton');
+const audioPlayer = document.getElementById('audioPlayer');
+const audioBlobInput = document.querySelectorAll('input[id*="audioBlob"]')[0];
+
+let mediaRecorder;
+let audioChunks = [];
+
+navigator.mediaDevices.getUserMedia({ audio: true })
+.then(stream => {
+    mediaRecorder = new MediaRecorder(stream);
+    
+    mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+            audioChunks.push(event.data);
+        }
+    };
+    
+    mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav; codecs=0' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audioPlayer.src = audioUrl;
+        audioBlobInput.value = audioBlob;
+        var formData = new FormData();
+        formData.append('audioBlob', audioBlob);
+        formData.append('csrfmiddlewaretoken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
+        formData.append('language', document.querySelector('input[name="language"]').value);
+        fetch(`${window.location.pathname}recording/`, {
+            method: 'POST',
+            body: formData
+        }) 
+        // get the uuid response from the server and print in the console
+        .then(
+            response => response.json()
+        )
+        .then(
+            data => audioBlobInput.value = data.uuid
+        )
+        .catch(error => console.error('Error:', error))
+        .then(response => console.log('Success:', response));
+
+    };
+    
+    startButton.addEventListener('click', () => {
+        audioChunks = [];
+        mediaRecorder.start();
+        startButton.disabled = true;
+        stopButton.disabled = false;
+        setTimeout(function() {
+            mediaRecorder.stop();
+            startButton.disabled = false;
+        }, 60000); // Record for one minute
+        
+
+        
+    });
+    
+    stopButton.addEventListener('click', () => {
+        mediaRecorder.stop();
+        startButton.disabled = false;
+        stopButton.disabled = true;
+    });
+})
+.catch(error => console.error('Error accessing microphone:', error));

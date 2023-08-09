@@ -163,3 +163,10 @@ cython_debug/
 
 # ignore static files collected by Django.
 staticfiles/
+
+
+# ignore media files collected by Django
+media/
+
+# ignore the files in recordings folder
+recordings/

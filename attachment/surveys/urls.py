@@ -2,10 +2,10 @@
 #
 # Path: attachment-project\attachment\surveys\urls.py
 from django.urls import path
-from .views import SurveyView
+from .views import SurveyView, RecordingView
 
 
 urlpatterns = [
     path("<slug:slug>/", SurveyView.as_view(), name="survey"),
-    # Add other URLs as needed
+    path("<slug:slug>/recording/", RecordingView.as_view(), name="recording"),
 ]
