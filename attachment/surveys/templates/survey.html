@@ -26,10 +26,14 @@
         <div class="row">
             <div class="input-field col s12">
                 {% for question in survey.checked_questions %}
+<<<<<<< HEAD
                     <div class="question-container {% if question.hidden %}hide hiddable{% endif %}">
                     {% if question.image %}
                         <img src="{{ question.image.url }}" alt="{{ question.image.name }}">
                     {% endif %}
+=======
+                    <div class="question-container {% if question.hidden %}hide hiddable{% endif %}"  >
+>>>>>>> 305fe3d9b419da1c7ac1992616500c5597787196
                     {% if question.questiontranslation_set.all %}
                         {% for question_translation in question.questiontranslation_set.all %}
                             {% if question_translation.language == LANGUAGE_CODE %}
@@ -59,12 +63,21 @@
                                         <input type="hidden" id="audioBlob_{{question.name}}" name="audio_{{question.name}}">
                                     {% else %}
                                         <div class="option-container{% if question.long_text %}block-label{% endif %}">
+<<<<<<< HEAD
                                             {% for option in options %}
                                                 <label {% if question.long_text %}class="block-label"{% endif %}>
                                                     <input type="radio" name="question_{{ question.name }}" value="{{ option.value }}">
                                                     <span>{{ option.label }}</span>
                                                 </label>
                                             {% endfor %}
+=======
+                                                {% for option in options %}
+                                                    <label {% if question.long_text %}class="block-label"{% endif %}>
+                                                        <input type="radio" name="question_{{ question.name }}" value="{{ option.value }}">
+                                                        <span>{{ option.label }}</span>
+                                                    </label>
+                                                {% endfor %}
+>>>>>>> 305fe3d9b419da1c7ac1992616500c5597787196
                                         </div>
                                     {% endif %}
                                     <br><br>
