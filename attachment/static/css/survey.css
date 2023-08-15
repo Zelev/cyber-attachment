@@ -69,3 +69,7 @@
 .left {
     float: left;
 }
+
+.previous-button{
+    background-color: grey;
+}
