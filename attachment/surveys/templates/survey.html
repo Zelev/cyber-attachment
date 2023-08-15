@@ -30,7 +30,7 @@
                         {% for question in questions %}
                             <div class="question-container {% if question.hidden %}hide hiddable{% endif %}">
                             {% if question.image %}
-                                <img src="{{ question.image.url }}" alt="{{ question.image.name }}">
+                                <img src="{{ question.image.url }}" alt="{{ question.image.name }}" class="survey-image">
                             {% endif %}
                             {% if question.questiontranslation_set.all %}
                                 {% for question_translation in question.questiontranslation_set.all %}
@@ -56,7 +56,7 @@
                                                 <input type="number" name="question_{{ question.name }}" required>
                                             {% elif question.question_type == 'recording' %}
                                                 <button id="startButton">Start Recording</button>
-                                                <button id="stopButton" disabled>Stop Recording</button>
+                                                <button id="stopButton" disabled class="hide">Stop Recording</button>
                                                 <audio id="audioPlayer" controls></audio>
                                                 <input type="hidden" id="audioBlob_{{question.name}}" name="audio_{{question.name}}">
                                             {% else %}

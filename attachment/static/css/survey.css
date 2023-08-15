@@ -53,3 +53,9 @@
     display: flex;
     align-items: center;
 }
+
+.survey-image{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
