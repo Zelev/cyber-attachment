@@ -42,7 +42,7 @@
                                             {% elif question.question_type == 'prompt' %}
                                                 <br>
                                             {% elif question.question_type == 'multiple_select' %}
-                                                <div class="option-container {% if question.long_text %}block-label{% endif %}">
+                                                <div class="option-container {% if question.long_text %} block-label{% endif %}">
                                                     {% for option in options %}
                                                         <label {% if question.long_text %}class="block-label"{% endif %}>
                                                             <input type="checkbox" name="question_{{ question.name }}" value="{{ option.value }}">
@@ -77,21 +77,21 @@
                             </div>
                         {% endfor %}
                         {% if not forloop.first %}
-                        <div class="flex">
-                            <div class="input-field col s6">
+                        <div class="flex left">
+                            <div class="input-field col s3">
                                 <button class="btn waves-effect waves-light previous-button" type="button" name="action">Previous</button>
                             </div>
                         </div>
                         {% endif %}
                         {% if forloop.last %}
-                        <div class="flex">
-                            <div class="input-field col s6">
+                        <div class="flex right">
+                            <div class="input-field col s3">
                                 <button class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
                             </div>
                         </div>
                         {% else %}
-                        <div class="flex">
-                            <div class="input-field col s6">
+                        <div class="flex left">
+                            <div class="input-field col s3">
                                 <button class="btn waves-effect waves-light next-button" type="button" name="action">Next</button>
                             </div>
                         </div>

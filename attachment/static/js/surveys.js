@@ -124,22 +124,24 @@ $(document).ready(function () {
     let currentScreenIndex = 0;
   
     function showScreen(index) {
-      screens.addClass("hide");
-      screens.eq(index).removeClass("hide");
+        screens.addClass("hide");
+        screens.eq(index).removeClass("hide");
+        // scroll to top of page
+        window.scrollTo(0, 0);
     }
   
     nextButtons.on("click", function () {
-      if (currentScreenIndex < screens.length - 1) {
-        currentScreenIndex++;
-        showScreen(currentScreenIndex);
-      }
+        if (currentScreenIndex < screens.length - 1) {
+            currentScreenIndex++;
+            showScreen(currentScreenIndex);
+        }
     });
   
     prevButtons.on("click", function () {
-      if (currentScreenIndex > 0) {
-        currentScreenIndex--;
-        showScreen(currentScreenIndex);
-      }
+        if (currentScreenIndex > 0) {
+            currentScreenIndex--;
+            showScreen(currentScreenIndex);
+        }
     });
 
     showScreen(currentScreenIndex);
