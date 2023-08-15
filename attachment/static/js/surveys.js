@@ -116,3 +116,36 @@ navigator.mediaDevices.getUserMedia({ audio: true })
     });
 })
 .catch(error => console.error('Error accessing microphone:', error));
+
+$(document).ready(function () {
+    const screens = $(".screen-container");
+    const nextButtons = $('button.next-button');
+    const prevButtons = $('button.previous-button');
+    let currentScreenIndex = 0;
+  
+    function showScreen(index) {
+      screens.addClass("hide");
+      screens.eq(index).removeClass("hide");
+    }
+  
+    nextButtons.on("click", function () {
+      if (currentScreenIndex < screens.length - 1) {
+        currentScreenIndex++;
+        showScreen(currentScreenIndex);
+      }
+    });
+  
+    prevButtons.on("click", function () {
+      if (currentScreenIndex > 0) {
+        currentScreenIndex--;
+        showScreen(currentScreenIndex);
+      }
+    });
+
+    showScreen(currentScreenIndex);
+});
+  
+  
+  
+  
+  

@@ -13,21 +13,25 @@ class SurveyView(View):
     def get(self, request, slug):
         survey = get_object_or_404(Survey, slug=slug)
         questions = []
-        for question in survey.questions.all():
-            question_class = False
-            for translation in question.questiontranslation_set.all():
-                for option in translation.options:
-                    if option.get("image"):
-                        question.image = option["image"]
-                    if len(option['label']) > 30:
-                        question_class = True
-                        break
-            question.long_text = question_class
-            questions.append(question)
-        survey.checked_questions = questions
-    
+        # get the screens
+        screens = {}
+        for screen in survey.screens.all():
+            screens[screen.id] = []
+            # check the questions in the screen
+            for question in screen.questions.all():
+                question_class = False
+                for translation in question.questiontranslation_set.all():
+                    for option in translation.options:
+                        if option.get("image"):
+                            question.image = option["image"]
+                        if len(option["label"]) > 30:
+                            question_class = True
+                            break
+                question.long_text = question_class
+                screens.get(screen.id).append(question)
+        survey.checked_screens = screens
         return render(request, f"{FILE_PATH}/templates/survey.html", {"survey": survey})
-    
+
     def post(self, request, slug):
         survey = Survey.objects.get(slug=slug)
         language = request.POST.get("language")
@@ -59,4 +63,8 @@ class RecordingView(View):
         recording = request.FILES.get("audioBlob")
         recording = Recording(recording=recording, language=language)
         recording.save()
-        return HttpResponse(json.dumps({"uuid": str(recording.uuid)}), status=200, content_type="application/json")
+        return HttpResponse(
+            json.dumps({"uuid": str(recording.uuid)}),
+            status=200,
+            content_type="application/json",
+        )

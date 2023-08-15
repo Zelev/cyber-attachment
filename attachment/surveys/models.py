@@ -31,6 +31,16 @@ class Survey(models.Model):
         super().save(*args, **kwargs)
 
 
+class Screen(models.Model):
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name="screens")
+    order = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.survey.name} - Screen {self.order}"
+
+    class Meta:
+        ordering = ["order"]
+
 
 class SurveyTranslation(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
@@ -59,17 +69,24 @@ class Question(models.Model):
         (LIKERT_7, "likert_7"),
         (NUMBER, "number"),
         (PROMPT, "prompt"),
-        (RECORDING, "recording")
+        (RECORDING, "recording"),
     ]
     name = models.CharField(max_length=60)
     survey = models.ManyToManyField(Survey, related_name="questions")
     question_type = models.CharField(max_length=60, choices=QUESTION_TYPES)
     order = models.IntegerField()
     hidden = models.BooleanField(default=False)
+    screen = models.ForeignKey(
+        Screen,
+        on_delete=models.CASCADE,
+        related_name="questions",
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
         ordering = ["order"]
 
@@ -111,16 +128,15 @@ class Recording(models.Model):
 
     def __str__(self):
         return str(self.recording)
-    
+
     def get_absolute_url(self):
         return self.recording.url
-    
+
     def get_recording_name(self):
         return self.recording.name.split("/")[-1]
-    
+
     def get_recording_size(self):
         return self.recording.size
-    
+
     def get_recording_type(self):
         return self.recording.content_type
-    

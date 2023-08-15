@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Survey, SurveyTranslation, Question, QuestionTranslation, Answer
+from .models import (
+    Survey,
+    SurveyTranslation,
+    Question,
+    QuestionTranslation,
+    Answer,
+    Screen,
+)
 
 
 class QuestionInline(admin.TabularInline):
@@ -17,9 +24,14 @@ class QuestionTranslationInline(admin.TabularInline):
     extra = 1
 
 
+class ScreenInline(admin.TabularInline):
+    model = Screen
+    extra = 1
+
+
 @admin.register(Survey)
 class SurveyAdmin(admin.ModelAdmin):
-    inlines = [SurveyTranslationInline, QuestionInline]
+    inlines = [SurveyTranslationInline, QuestionInline, ScreenInline]
     exclude = ("questions",)  # Exclude questions field from the main form
 
 
@@ -37,8 +49,8 @@ class QuestionTranslationAdmin(admin.ModelAdmin):
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [QuestionTranslationInline]
     list_display = ("name", "question_type", "order")
-    list_filter = ("question_type","name")
-    search_fields = ("question_type","name")
+    list_filter = ("question_type", "name")
+    search_fields = ("question_type", "name")
     exclude = ("survey",)
 
 
@@ -51,3 +63,8 @@ class AnswerAdmin(admin.ModelAdmin):
     list_display = ("survey", "get_answers", "created_at")
     list_filter = ("survey",)
     search_fields = ("survey",)
+
+
+@admin.register(Screen)
+class ScreenAdmin(admin.ModelAdmin):
+    pass
