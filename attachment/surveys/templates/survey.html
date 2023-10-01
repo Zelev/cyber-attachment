@@ -28,7 +28,7 @@
                 <div class="screen-container" id="screen_{{screen_id}}">
                     <div class="input-field col s12">
                         {% for question in questions %}
-                            <div class="question-container {% if question.hidden %}hide hiddable{% endif %}">
+                            <div class="question-container {% if question.hidden %}hide hiddable{% endif %} container">
                             {% if question.image %}
                                 <img src="{{ question.image.url }}" alt="{{ question.image.name }}" class="survey-image">
                             {% endif %}
@@ -55,10 +55,13 @@
                                             {% elif question.question_type == 'number' %}
                                                 <input type="number" name="question_{{ question.name }}" required>
                                             {% elif question.question_type == 'recording' %}
-                                                <button id="startButton">Start Recording</button>
-                                                <button id="stopButton" disabled class="hide">Stop Recording</button>
-                                                <audio id="audioPlayer" controls></audio>
-                                                <input type="hidden" id="audioBlob_{{question.name}}" name="audio_{{question.name}}">
+                                                <div class="container valign-wrapper recording-container">
+                                                    <button id="startButton_{{question.name}}" class="btn waves-effect waves-light record-button startRecording col">Start Recording</button>
+                                                    <dotlottie-player class="hide recording-animation" src="https://lottie.host/d610f9d2-0fd5-4fe0-a7bb-af9382beb102/UgnoSoFgjn.json" background="transparent" speed="0.3" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
+                                                    <button id="stopButton_{{question.name}}" disabled class="stopRecording hide">Stop Recording</button>
+                                                    <audio id="audioPlayer_{{question.name}}" controls class="audioPlayer hide"></audio>
+                                                    <input type="hidden" id="audioBlob_{{question.name}}" name="audio_{{question.name}}">
+                                                </div>
                                             {% else %}
                                                 <div class="option-container{% if question.long_text %}block-label{% endif %}">
                                                         {% for option in options %}
@@ -86,7 +89,7 @@
                         {% if forloop.last %}
                         <div class="flex right">
                             <div class="input-field col s3">
-                                <button class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
+                                <button class="btn waves-effect waves-light submit-button" type="submit" name="action">Submit</button>
                             </div>
                         </div>
                         {% else %}
@@ -106,4 +109,5 @@
 
 {% block js %}
     <script src="{% static 'js/surveys.js' %}"></script>
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 {% endblock %}

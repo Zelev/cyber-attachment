@@ -52,10 +52,58 @@ for (var i = 0; i < gadsElements.length; i++) {
   gadsElements[i].addEventListener("click", showGADS);
 }
 
-const startButton = document.getElementById('startButton');
-const stopButton = document.getElementById('stopButton');
-const audioPlayer = document.getElementById('audioPlayer');
-const audioBlobInput = document.querySelectorAll('input[id*="audioBlob"]')[0];
+$(document).ready(function () {
+    const screens = $(".screen-container");
+    const nextButtons = $('button.next-button');
+    const prevButtons = $('button.previous-button');
+    let currentScreenIndex = 0;
+  
+    function showScreen(index) {
+        screens.addClass("hide");
+        screens.removeClass("active");
+        screens.eq(index).removeClass("hide");
+        screens.eq(index).addClass("active");
+        checkRecording();
+        // scroll to top of page
+        window.scrollTo(0, 0);
+    }
+  
+    nextButtons.on("click", function () {
+        if (currentScreenIndex < screens.length - 1) {
+
+            currentScreenIndex++;
+            showScreen(currentScreenIndex);
+            if (currentScreenIndex !== 0) {
+                $('h1.survey-title').addClass("hide");
+            }
+        }
+    });
+  
+    prevButtons.on("click", function () {
+        if (currentScreenIndex > 0) {
+            currentScreenIndex--;
+            showScreen(currentScreenIndex);
+            if (currentScreenIndex === 0) {
+                $('h1.survey-title').removeClass("hide");
+            }
+        }
+    });
+
+    showScreen(currentScreenIndex);
+});
+  
+function checkRecording() {
+    var recording = $('.screen-container.active audio');
+    if (recording.length > 0) {
+        $('.screen-container.active button.previous-button').addClass("hide");
+        $('.screen-container.active button.next-button').addClass("hide");
+        $('.screen-container.active button.submit-button').addClass("hide");
+    }
+}
+  
+
+const startButtons = $('button.startRecording');
+const stopButtons = $('button.stopRecording');
 
 let mediaRecorder;
 let audioChunks = [];
@@ -73,8 +121,12 @@ navigator.mediaDevices.getUserMedia({ audio: true })
     mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunks, { type: 'audio/wav; codecs=0' });
         const audioUrl = URL.createObjectURL(audioBlob);
-        audioPlayer.src = audioUrl;
-        audioBlobInput.value = audioBlob;
+        var audioPlayer = $('.screen-container.active audio');
+        audioPlayer.attr('src', audioUrl);
+
+        // get closer audioBlobInput
+        var audioBlobInput = $('.screen-container.active input[id*="audioBlob"]');
+        audioBlobInput.val(audioBlob);
         var formData = new FormData();
         formData.append('audioBlob', audioBlob);
         formData.append('csrfmiddlewaretoken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
@@ -88,66 +140,46 @@ navigator.mediaDevices.getUserMedia({ audio: true })
             response => response.json()
         )
         .then(
-            data => audioBlobInput.value = data.uuid
+            data => audioBlobInput.val(data.uuid)
         )
         .catch(error => console.error('Error:', error))
         .then(response => console.log('Success:', response));
 
     };
     
-    startButton.addEventListener('click', () => {
+    startButtons.on("click", function () {
+        var parent = $(this).closest('.question-container .recording-container');
         audioChunks = [];
         mediaRecorder.start();
-        startButton.disabled = true;
-        stopButton.disabled = false;
+        startButtons.attr("disabled", true);
+        stopButtons.attr("disabled", false);
+        parent.children('dotlottie-player').removeClass("hide");
+        parent.children('audio').addClass("hide");
         setTimeout(function() {
-            mediaRecorder.stop();
-            startButton.disabled = false;
-        }, 60000); // Record for one minute
-        
-
-        
+            mediaRecorder.stop(parent);
+            startButtons.attr("disabled", false);
+            $('.screen-container.active dotlottie-player').addClass("hide");
+            // next button
+            if (checkHiddenElements()) {
+                parent.children('audio').removeClass("hide");
+                $('.screen-container.active button.next-button').removeClass("hide");
+                $('.screen-container.active button.submit-button').removeClass("hide");
+            }
+        }
+        , 60000); // Record for one minute
     });
     
-    stopButton.addEventListener('click', () => {
+    stopButtons.on("click", function () {
         mediaRecorder.stop();
-        startButton.disabled = false;
-        stopButton.disabled = true;
+        startButtons.disabled = false;
+        stopButtons.disabled = true;
+        $('.screen-container.active audio').removeClass("hide");
+        $('.screen-container.active dotlottie-player').addClass("hide");
+        // next button
+        if (checkHiddenElements()) {
+            $('.screen-container.active button.next-button').removeClass("hide");
+            $('.screen-container.active button.submit-button').removeClass("hide");
+        }
     });
 })
 .catch(error => console.error('Error accessing microphone:', error));
-
-$(document).ready(function () {
-    const screens = $(".screen-container");
-    const nextButtons = $('button.next-button');
-    const prevButtons = $('button.previous-button');
-    let currentScreenIndex = 0;
-  
-    function showScreen(index) {
-        screens.addClass("hide");
-        screens.eq(index).removeClass("hide");
-        // scroll to top of page
-        window.scrollTo(0, 0);
-    }
-  
-    nextButtons.on("click", function () {
-        if (currentScreenIndex < screens.length - 1) {
-            currentScreenIndex++;
-            showScreen(currentScreenIndex);
-        }
-    });
-  
-    prevButtons.on("click", function () {
-        if (currentScreenIndex > 0) {
-            currentScreenIndex--;
-            showScreen(currentScreenIndex);
-        }
-    });
-
-    showScreen(currentScreenIndex);
-});
-  
-  
-  
-  
-  
