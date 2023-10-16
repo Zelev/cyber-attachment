@@ -57,11 +57,17 @@ $(document).ready(function () {
     const nextButtons = $('button.next-button');
     const prevButtons = $('button.previous-button');
     let currentScreenIndex = 0;
-  
+
     function showScreen(index) {
         screens.addClass("hide");
         screens.removeClass("active");
+        screens.css("opacity", 0)
         screens.eq(index).removeClass("hide");
+        // fade in
+        screens.eq(index).animate(
+            {opacity: 1},
+            {duration: 500, queue: false}
+        );
         screens.eq(index).addClass("active");
         checkRecording();
         // scroll to top of page
@@ -70,7 +76,9 @@ $(document).ready(function () {
   
     nextButtons.on("click", function () {
         if (currentScreenIndex < screens.length - 1) {
-
+            //Check that all questions in screen have been answered
+            
+            
             currentScreenIndex++;
             showScreen(currentScreenIndex);
             if (currentScreenIndex !== 0) {
