@@ -6,6 +6,7 @@ from .models import (
     QuestionTranslation,
     Answer,
     Screen,
+    Recording,
 )
 
 
@@ -67,4 +68,9 @@ class AnswerAdmin(admin.ModelAdmin):
 
 @admin.register(Screen)
 class ScreenAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Recording)
+class Recording(admin.ModelAdmin):
     pass

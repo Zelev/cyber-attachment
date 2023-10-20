@@ -55,7 +55,7 @@
                                             {% elif question.question_type == 'number' %}
                                                 <input type="number" name="question_{{ question.name }}" required>
                                             {% elif question.question_type == 'recording' %}
-                                                <div class="container valign-wrapper recording-container">
+                                                <div class="recording-container container valign-wrapper">
                                                     <button id="startButton_{{question.name}}" class="btn waves-effect waves-light record-button startRecording col">Start Recording</button>
                                                     <dotlottie-player class="hide recording-animation" src="https://lottie.host/d610f9d2-0fd5-4fe0-a7bb-af9382beb102/UgnoSoFgjn.json" background="transparent" speed="0.3" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
                                                     <button id="stopButton_{{question.name}}" disabled class="stopRecording hide">Stop Recording</button>
