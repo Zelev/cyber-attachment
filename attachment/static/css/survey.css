@@ -93,5 +93,8 @@ div.alert {
 
 .question-container {
     margin-bottom: 1em;
+}
+
+.centered {
     text-align: center;
 }

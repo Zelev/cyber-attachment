@@ -185,7 +185,7 @@ $(document).ready(function () {
                 }
             });
             if (missing_count > 0) {
-                first_missing.get(0).scrollIntoView({behavior: 'smooth'});
+                first_missing.get(0).scrollIntoView({ behavior: 'smooth' });
                 return false;
             }
             currentScreenIndex++;
@@ -222,7 +222,7 @@ function checkRecording() {
         $('.screen-container.active button.submit-button').addClass("hide");
     }
     var audio_value = $('.screen-container.active input[id*="audioBlob"]').val();
-    if ( audio_value !== "" || audio_value !== null || audio_value !== undefined) {
+    if (audio_value !== "" || audio_value !== null || audio_value !== undefined) {
         $('.screen-container.active button.next-button').removeClass("hide");
         $('.screen-container.active button.submit-button').removeClass("hide");
     }
@@ -276,6 +276,7 @@ navigator.mediaDevices.getUserMedia({ audio: true })
 
         startButtons.on("click", function () {
             var parent = $(this).closest('.question-container .recording-container');
+            $(this).closest('.question-container').removeClass('alert');
             audioChunks = [];
             mediaRecorder.start();
             startButtons.attr("disabled", true);

@@ -28,7 +28,7 @@
                 <div class="screen-container" id="screen_{{screen_id}}">
                     <div class="input-field col s12">
                         {% for question in questions %}
-                            <div class="question-container {% if question.hidden %}hide hiddable{% endif %} container">
+                            <div class="question-container {% if question.hidden %}hide hiddable{% endif %} container {% if question.image %} centered {% endif %} ">
                             {% if question.image %}
                                 <img src="{{ question.image.url }}" alt="{{ question.image.name }}" class="survey-image">
                             {% endif %}
