@@ -163,7 +163,6 @@ $(document).ready(function () {
     const screens = $(".screen-container");
     const nextButtons = $('button.next-button');
     const prevButtons = $('button.previous-button');
-    let firstLoad = true;
 
     let currentScreenIndex = 0;
 
@@ -189,42 +188,38 @@ $(document).ready(function () {
             missing_count = 0;
             first_missing = null;
             //Check that all questions in screen have been
-            if (!firstLoad) {
-                screens.eq(currentScreenIndex).find('input, textarea, select').each(function () {
-                    // if it is a radio button check if there's any option checked
-                    switch ($(this).attr('type')) {
-                        case 'radio':
-                            check_radio_input(this);
-                            break;
+            screens.eq(currentScreenIndex).find('input, textarea, select').each(function () {
+                // if it is a radio button check if there's any option checked
+                switch ($(this).attr('type')) {
+                    case 'radio':
+                        check_radio_input(this);
+                        break;
 
-                        case 'number':
-                            check_number_input(this);
-                            break;
+                    case 'number':
+                        check_number_input(this);
+                        break;
 
-                        case 'text':
-                            check_text_input(this);
-                            break;
+                    case 'text':
+                        check_text_input(this);
+                        break;
 
-                        case 'hidden':
-                            check_hidden_input(this);
-                            break
+                    case 'hidden':
+                        check_hidden_input(this);
+                        break
 
-                        default:
-                            check_text_input(this);
-                            break;
-                    }
-                    if (missing_count > 0) {
-                        return false;
-                    }
-                    if (check_exclusion(this)) {
-                        // submit form
-                        $('form').submit();
-                        return false;
-                    }
-                });
-            } else {
-                firstLoad = false;
-            }
+                    default:
+                        check_text_input(this);
+                        break;
+                }
+                if (missing_count > 0) {
+                    return false;
+                }
+                if (check_exclusion(this)) {
+                    // submit form
+                    $('form').submit();
+                    return false;
+                }
+            });
             if (missing_count > 0) {
                 first_missing.get(0).scrollIntoView({ behavior: 'smooth' });
                 return false;
