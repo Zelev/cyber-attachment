@@ -19,6 +19,8 @@ class SurveyView(View):
             screens[screen.id] = []
             # check the questions in the screen
             for question in screen.questions.all():
+                if question.exclusion_value:
+                    question.exclusion_value = json.dumps(question.exclusion_value)
                 question_class = False
                 for translation in question.questiontranslation_set.all():
                     for option in translation.options:

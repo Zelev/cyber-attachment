@@ -55,6 +55,33 @@ for (var i = 0; i < gadsElements.length; i++) {
 let missing_count = 0;
 let first_missing = null;
 
+function check_exclusion(element) {
+    var value = $(element).val().trim();
+    var question = $(element).closest('.question-container');
+    if (question.attr("exclusion-value") === undefined || question.attr("exclusion-value") === "" || question.attr("exclusion-value") === null) {
+        return false;
+    }
+    var exclusion_value = JSON.parse(question.attr("exclusion-value"))
+    if (
+        (exclusion_value !== undefined || exclusion_value !== "" || exclusion_value !== null)
+    ) {
+        var excluded = exclusion_value.includes(value);
+        var selected = false;
+        switch ($(element).attr('type')) {
+            case 'radio':
+                if($(element).is(':checked')) {
+                    selected = true;
+                }
+                break;
+
+            default:
+                break;
+        }
+        return excluded && selected;
+    }
+    return false;
+}
+
 function check_radio_input(element) {
     var radio_name = $(element).attr('name');
     var radio_checked = $('input[name="' + radio_name + '"]:checked');
@@ -143,13 +170,14 @@ $(document).ready(function () {
         screens.addClass("hide");
         screens.removeClass("active");
         screens.css("opacity", 0)
-        screens.eq(index).removeClass("hide");
+        var active_screen = screens.eq(index);
+        active_screen.removeClass("hide");
         // fade in
-        screens.eq(index).animate(
+        active_screen.animate(
             { opacity: 1 },
             { duration: 500, queue: false }
         );
-        screens.eq(index).addClass("active");
+        active_screen.addClass("active");
         checkRecording();
         // scroll to top of page
         window.scrollTo(0, 0);
@@ -183,6 +211,14 @@ $(document).ready(function () {
                         check_text_input(this);
                         break;
                 }
+                if (missing_count > 0) {
+                    return false;
+                }
+                if (check_exclusion(this)) {
+                    // submit form
+                    $('form').submit();
+
+                }
             });
             if (missing_count > 0) {
                 first_missing.get(0).scrollIntoView({ behavior: 'smooth' });
@@ -192,6 +228,9 @@ $(document).ready(function () {
             showScreen(currentScreenIndex);
             if (currentScreenIndex !== 0) {
                 $('h1.survey-title').addClass("hide");
+            }
+            if ($('.screen-container.active .recording-container').length > 0) {
+                $('.screen-container.active button.next-button').addClass("hide");
             }
         }
     });

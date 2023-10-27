@@ -28,7 +28,7 @@
                 <div class="screen-container" id="screen_{{screen_id}}">
                     <div class="input-field col s12">
                         {% for question in questions %}
-                            <div class="question-container {% if question.hidden %}hide hiddable{% endif %} container {% if question.image %} centered {% endif %} ">
+                            <div class="question-container {% if question.hidden %}hide hiddable{% endif %} container {% if question.image %} centered {% endif %}" {% if question.exclusion_value %} exclusion-value={{question.exclusion_value}} {% endif%}>
                             {% if question.image %}
                                 <img src="{{ question.image.url }}" alt="{{ question.image.name }}" class="survey-image">
                             {% endif %}
@@ -95,7 +95,7 @@
                         {% else %}
                         <div class="flex right">
                             <div class="input-field col s3">
-                                <button class="btn waves-effect waves-light next-button" type="button" name="action">Next</button>
+                                <button class="btn waves-effect waves-light next-button hide" type="button" name="action">Next</button>
                             </div>
                         </div>
                         {% endif %}

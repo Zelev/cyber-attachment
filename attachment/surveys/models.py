@@ -83,6 +83,7 @@ class Question(models.Model):
         null=True,
         blank=True,
     )
+    exclusion_value = models.JSONField(max_length=120, null=True, blank=True)
 
     def __str__(self):
         return self.name
