@@ -34,7 +34,11 @@ class SurveyView(View):
                 question.long_text = question_class
                 screens.get(screen.id).append(question)
         survey.checked_screens = screens
-        return render(request, f"{FILE_PATH}/templates/survey.html", {"survey": survey, "uuid": survey_uuid})
+        return render(
+            request,
+            f"{FILE_PATH}/templates/survey.html",
+            {"survey": survey, "uuid": survey_uuid},
+        )
 
     def post(self, request, slug):
         survey = Survey.objects.get(slug=slug)
@@ -65,7 +69,11 @@ class SurveyView(View):
             Recording.objects.filter(uuid__in=audio_uuids).update(answer=answer)
         if survey.next_survey:
             redirect_url = survey.next_survey.get_absolute_url()
-            return render(request, f"{FILE_PATH}/templates/survey_submit.html", {"survey": redirect_url, "uuid": response_uuid, "excluded": excluded})
+            return render(
+                request,
+                f"{FILE_PATH}/templates/survey_submit.html",
+                {"survey": redirect_url, "uuid": response_uuid, "excluded": excluded},
+            )
         return render(request, f"{FILE_PATH}/templates/survey_submit.html")
 
 

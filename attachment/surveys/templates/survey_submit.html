@@ -8,7 +8,9 @@
         {% if excluded %}
             console.log("{{ excluded }}");
         {% else %}
-            window.location.href = "{{ survey }}";
+            {% if survey %}
+                window.location.href = "{{ survey }}";
+            {% endif %}
         {% endif %}
     </script>
 {% endblock %}
