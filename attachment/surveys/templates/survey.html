@@ -23,6 +23,7 @@
     <form action="{{ request.get_full_path }}" method="post" class="container" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="language" value="{{ LANGUAGE_CODE }}">
+        <input type="hidden" name="response-uuid" value="{{ uuid }}">
         <div class="row">
             {% for screen_id, questions  in survey.checked_screens.items %}
                 <div class="screen-container" id="screen_{{screen_id}}">

@@ -159,6 +159,52 @@ function check_number_input(element) {
 }
 
 
+function dataValidation(current_screen) {
+    missing_count = 0;
+    first_missing = null;
+    //Check that all questions in screen have been
+    current_screen.find('input, textarea, select').each(function () {
+        // if it is a radio button check if there's any option checked
+        switch ($(this).attr('type')) {
+            case 'radio':
+                check_radio_input(this);
+                break;
+
+            case 'number':
+                check_number_input(this);
+                break;
+
+            case 'text':
+                check_text_input(this);
+                break;
+
+            case 'hidden':
+                check_hidden_input(this);
+                break
+
+            default:
+                check_text_input(this);
+                break;
+        }
+        if (missing_count > 0) {
+            return false;
+        }
+        if (check_exclusion(this)) {
+            // submit form
+            // add 'excluded' = true to the form
+            $('form').append('<input type="hidden" name="excluded" value="true">');
+            $('form').submit();
+            return false;
+        }
+    });
+    if (missing_count > 0) {
+        first_missing.get(0).scrollIntoView({ behavior: 'smooth' });
+        return false;
+    }
+    return true;
+}
+
+
 $(document).ready(function () {
     const screens = $(".screen-container");
     const nextButtons = $('button.next-button');
@@ -185,43 +231,7 @@ $(document).ready(function () {
 
     nextButtons.on("click", function () {
         if (currentScreenIndex < screens.length - 1) {
-            missing_count = 0;
-            first_missing = null;
-            //Check that all questions in screen have been
-            screens.eq(currentScreenIndex).find('input, textarea, select').each(function () {
-                // if it is a radio button check if there's any option checked
-                switch ($(this).attr('type')) {
-                    case 'radio':
-                        check_radio_input(this);
-                        break;
-
-                    case 'number':
-                        check_number_input(this);
-                        break;
-
-                    case 'text':
-                        check_text_input(this);
-                        break;
-
-                    case 'hidden':
-                        check_hidden_input(this);
-                        break
-
-                    default:
-                        check_text_input(this);
-                        break;
-                }
-                if (missing_count > 0) {
-                    return false;
-                }
-                if (check_exclusion(this)) {
-                    // submit form
-                    $('form').submit();
-                    return false;
-                }
-            });
-            if (missing_count > 0) {
-                first_missing.get(0).scrollIntoView({ behavior: 'smooth' });
+            if (!dataValidation(screens.eq(currentScreenIndex))) {
                 return false;
             }
             currentScreenIndex++;
@@ -246,6 +256,13 @@ $(document).ready(function () {
     });
 
     showScreen(currentScreenIndex);
+
+    // validate form before submitting
+    $('form').on("submit", function (event) {
+        if(!dataValidation(screens.eq(currentScreenIndex))) {
+            event.preventDefault();
+        }
+    });
 
     // add a listener to all inputs to remove the alert class when the user starts typing
     $('input, textarea, select').on("input", function () {

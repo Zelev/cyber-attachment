@@ -18,6 +18,9 @@ class LanguageEnum(Enum):
 class Survey(models.Model):
     name = models.CharField(max_length=60)
     slug = models.SlugField(max_length=60, unique=True)
+    next_survey = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.SET_NULL
+    )
 
     def __str__(self):
         return self.name

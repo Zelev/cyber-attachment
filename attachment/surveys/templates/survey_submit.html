@@ -3,3 +3,13 @@
 {% block content %}
     <h1>Thank you for your submission!</h1>
 {% endblock %}
+{% block js %}
+    <script>
+        {% if excluded %}
+            console.log("{{ excluded }}");
+        {% else %}
+            window.location.href = "{{ survey }}";
+        {% endif %}
+    </script>
+{% endblock %}
+
