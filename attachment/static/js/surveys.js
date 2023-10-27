@@ -222,6 +222,8 @@ $(document).ready(function () {
                         return false;
                     }
                 });
+            } else {
+                firstLoad = false;
             }
             if (missing_count > 0) {
                 first_missing.get(0).scrollIntoView({ behavior: 'smooth' });
