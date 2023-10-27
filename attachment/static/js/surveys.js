@@ -217,7 +217,7 @@ $(document).ready(function () {
                 if (check_exclusion(this)) {
                     // submit form
                     $('form').submit();
-
+                    return false;
                 }
             });
             if (missing_count > 0) {
