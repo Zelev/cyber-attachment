@@ -9,7 +9,7 @@
             console.log("{{ excluded }}");
         {% else %}
             {% if survey %}
-                window.location.href = "{{ survey }}";
+                window.location.href = "{{ survey }}?uuid={{ uuid }}";
             {% endif %}
         {% endif %}
     </script>
