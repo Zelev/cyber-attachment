@@ -56,11 +56,15 @@
                                             {% elif question.question_type == 'number' %}
                                                 <input type="number" name="question_{{ question.name }}" required>
                                             {% elif question.question_type == 'recording' %}
-                                                <div class="recording-container container valign-wrapper">
-                                                    <button id="startButton_{{question.name}}" class="btn waves-effect waves-light record-button startRecording col">Start Recording</button>
-                                                    <dotlottie-player class="hide recording-animation" src="https://lottie.host/d610f9d2-0fd5-4fe0-a7bb-af9382beb102/UgnoSoFgjn.json" background="transparent" speed="0.3" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
-                                                    <button id="stopButton_{{question.name}}" disabled class="stopRecording hide">Stop Recording</button>
-                                                    <audio id="audioPlayer_{{question.name}}" controls class="audioPlayer hide"></audio>
+                                                <div class="recording-container container">
+                                                    <div class="row s12" style="width: 100%;">
+                                                        <button id="startButton_{{question.name}}" class="btn waves-effect waves-light record-button startRecording col s12">Start Recording</button>
+                                                        <dotlottie-player class="hide recording-animation col s12 offset-s4" src="https://lottie.host/d610f9d2-0fd5-4fe0-a7bb-af9382beb102/UgnoSoFgjn.json" background="transparent" speed="0.3" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
+                                                    </div>
+                                                    <div class="row s12" style="width: 100%">
+                                                        <button id="stopButton_{{question.name}}" disabled class="stopRecording col s12 hide btn waves-effect waves-light">Stop Recording</button>
+                                                        <audio id="audioPlayer_{{question.name}}" controls class="audioPlayer hide col s12"></audio>
+                                                    </div>
                                                     <input type="hidden" id="audioBlob_{{question.name}}" name="audio_{{question.name}}">
                                                 </div>
                                             {% else %}

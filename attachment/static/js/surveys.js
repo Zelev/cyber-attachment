@@ -291,79 +291,84 @@ const stopButtons = $('button.stopRecording');
 let mediaRecorder;
 let audioChunks = [];
 
-navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(stream => {
-        mediaRecorder = new MediaRecorder(stream);
+navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    mediaRecorder = new MediaRecorder(stream);
 
-        mediaRecorder.ondataavailable = event => {
-            if (event.data.size > 0) {
-                audioChunks.push(event.data);
-            }
-        };
+    mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+            audioChunks.push(event.data);
+        }
+    };
 
-        mediaRecorder.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/wav; codecs=0' });
-            const audioUrl = URL.createObjectURL(audioBlob);
-            var audioPlayer = $('.screen-container.active audio');
-            audioPlayer.attr('src', audioUrl);
+    mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav; codecs=0' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        var audioPlayer = $('.screen-container.active audio');
+        audioPlayer.attr('src', audioUrl);
 
-            // get closer audioBlobInput
-            var audioBlobInput = $('.screen-container.active input[id*="audioBlob"]');
-            audioBlobInput.val(audioBlob);
-            var formData = new FormData();
-            formData.append('audioBlob', audioBlob);
-            formData.append('csrfmiddlewaretoken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
-            formData.append('language', document.querySelector('input[name="language"]').value);
-            fetch(`${window.location.pathname}recording/`, {
-                method: 'POST',
-                body: formData
-            })
-                // get the uuid response from the server and print in the console
-                .then(
-                    response => response.json()
-                )
-                .then(
-                    data => audioBlobInput.val(data.uuid)
-                )
-                .catch(error => console.error('Error:', error))
-                .then(response => console.log('Success:', response));
+        // get closer audioBlobInput
+        var audioBlobInput = $('.screen-container.active input[id*="audioBlob"]');
+        audioBlobInput.val(audioBlob);
+        var formData = new FormData();
+        formData.append('audioBlob', audioBlob);
+        formData.append('csrfmiddlewaretoken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
+        formData.append('language', document.querySelector('input[name="language"]').value);
+        fetch(`${window.location.pathname}recording/`, {
+            method: 'POST',
+            body: formData
+        })
+            // get the uuid response from the server and print in the console
+            .then(
+                response => response.json()
+            )
+            .then(
+                data => audioBlobInput.val(data.uuid)
+            )
+            .catch(error => console.error('Error:', error))
+            .then(response => console.log('Success:', response));
 
-        };
+    };
 
-        startButtons.on("click", function () {
-            var parent = $(this).closest('.question-container .recording-container');
-            $(this).closest('.question-container').removeClass('alert');
-            audioChunks = [];
-            mediaRecorder.start();
-            startButtons.attr("disabled", true);
-            stopButtons.attr("disabled", false);
-            parent.children('dotlottie-player').removeClass("hide");
-            parent.children('audio').addClass("hide");
-            setTimeout(function () {
-                mediaRecorder.stop(parent);
-                startButtons.attr("disabled", false);
-                $('.screen-container.active dotlottie-player').addClass("hide");
-                // next button
-                if (checkHiddenElements()) {
-                    parent.children('audio').removeClass("hide");
-                    $('.screen-container.active button.next-button').removeClass("hide");
-                    $('.screen-container.active button.submit-button').removeClass("hide");
-                }
-            }
-                , 60000); // Record for one minute
-        });
-
-        stopButtons.on("click", function () {
-            mediaRecorder.stop();
-            startButtons.disabled = false;
-            stopButtons.disabled = true;
-            $('.screen-container.active audio').removeClass("hide");
+    startButtons.on("click", function () {
+        var parent = $(this).closest('.question-container .recording-container');
+        $(this).closest('.question-container').removeClass('alert');
+        audioChunks = [];
+        mediaRecorder.start();
+        startButtons.attr("disabled", true);
+        stopButtons.attr("disabled", false);
+        $('.screen-container.active button.startRecording').addClass('hide');
+        parent.find('dotlottie-player').removeClass("hide");
+        parent.find('audio').addClass("hide");
+        setTimeout(function () {
+            $('.screen-container.active button.stopRecording').removeClass('hide');
+            $('.screen-container.active button.startRecording').addClass('hide');
+        }, 20000);
+        setTimeout(function () {
+            mediaRecorder.stop(parent);
+            startButtons.attr("disabled", false);
             $('.screen-container.active dotlottie-player').addClass("hide");
+            $('.screen-container.active button.stopRecording').addClass('hide');
             // next button
             if (checkHiddenElements()) {
+                parent.find('audio').removeClass("hide");
                 $('.screen-container.active button.next-button').removeClass("hide");
                 $('.screen-container.active button.submit-button').removeClass("hide");
             }
-        });
-    })
-    .catch(error => console.error('Error accessing microphone:', error));
+        }, 60000); // Record for one minute
+    });
+
+    stopButtons.on("click", function () {
+        mediaRecorder.stop();
+        startButtons.attr("disabled", false);
+        stopButtons.attr("disabled", true);
+        $('.screen-container.active audio').removeClass("hide");
+        $('.screen-container.active dotlottie-player').addClass("hide");
+        $('.screen-container.active button.stopRecording').addClass('hide');
+        // next button
+        if (checkHiddenElements()) {
+            $('.screen-container.active button.next-button').removeClass("hide");
+            $('.screen-container.active button.submit-button').removeClass("hide");
+        }
+    });
+})
+.catch(error => console.error('Error accessing microphone:', error));
