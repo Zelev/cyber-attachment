@@ -98,6 +98,20 @@ else:
         }
     }
 
+# Storage settings
+if os.environ.get("ENV") == "PRODUCTION":
+    DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
+    AZURE_ACCOUNT_NAME = os.environ.get("AZURE_ACCOUNT_NAME")
+    AZURE_ACCOUNT_KEY = os.environ.get("AZURE_ACCOUNT_KEY")
+    AZURE_CONTAINER = os.environ.get("AZURE_CONTAINER")
+    AZURE_SSL = True
+    AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
+else:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
