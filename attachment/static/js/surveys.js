@@ -268,6 +268,20 @@ $(document).ready(function () {
     $('input, textarea, select').on("input", function () {
         $(this).closest('.question-container').removeClass('alert');
     });
+
+    // if the user abandons the page, submit the info to the server
+    window.addEventListener("beforeunload", function (e) {
+        var form = $('form');
+        var formData = new FormData(form[0]);
+        formData.append('csrfmiddlewaretoken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
+        formData.append('language', document.querySelector('input[name="language"]').value);
+        fetch(`${window.location.pathname}abandon/`, {
+            method: 'POST',
+            body: formData
+        })
+            .catch(error => console.error('Error:', error))
+            .then(response => console.log('Success:', response));
+    }
 });
 
 function checkRecording() {
