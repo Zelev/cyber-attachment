@@ -292,6 +292,7 @@ let mediaRecorder;
 let audioChunks = [];
 
 navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    var stopped = false;
     mediaRecorder = new MediaRecorder(stream);
 
     mediaRecorder.ondataavailable = event => {
@@ -301,6 +302,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
     };
 
     mediaRecorder.onstop = () => {
+        stopped = true;
         const audioBlob = new Blob(audioChunks, { type: 'audio/wav; codecs=0' });
         const audioUrl = URL.createObjectURL(audioBlob);
         var audioPlayer = $('.screen-container.active audio');
@@ -330,44 +332,50 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
     };
 
     startButtons.on("click", function () {
+        stopped = false;
         var parent = $(this).closest('.question-container .recording-container');
+        var active_screen = $(this).closest('.screen-container');
         $(this).closest('.question-container').removeClass('alert');
         audioChunks = [];
         mediaRecorder.start();
         startButtons.attr("disabled", true);
         stopButtons.attr("disabled", false);
-        $('.screen-container.active button.startRecording').addClass('hide');
+        active_screen.find('button.startRecording').addClass('hide');
         parent.find('dotlottie-player').removeClass("hide");
         parent.find('audio').addClass("hide");
         setTimeout(function () {
-            $('.screen-container.active button.stopRecording').removeClass('hide');
-            $('.screen-container.active button.startRecording').addClass('hide');
+            active_screen.find('button.stopRecording').removeClass('hide');
+            active_screen.find('button.startRecording').addClass('hide');
         }, 20000);
         setTimeout(function () {
+            if (stopped) {
+                return;
+            }
             mediaRecorder.stop(parent);
             startButtons.attr("disabled", false);
-            $('.screen-container.active dotlottie-player').addClass("hide");
-            $('.screen-container.active button.stopRecording').addClass('hide');
+            active_screen.find('dotlottie-player').addClass("hide");
+            active_screen.find('button.stopRecording').addClass('hide');
             // next button
             if (checkHiddenElements()) {
                 parent.find('audio').removeClass("hide");
-                $('.screen-container.active button.next-button').removeClass("hide");
-                $('.screen-container.active button.submit-button').removeClass("hide");
+                active_screen.find('button.next-button').removeClass("hide");
+                active_screen.find('button.submit-button').removeClass("hide");
             }
         }, 60000); // Record for one minute
     });
 
     stopButtons.on("click", function () {
+        var active_screen = $(this).closest('.screen-container');
         mediaRecorder.stop();
         startButtons.attr("disabled", false);
         stopButtons.attr("disabled", true);
-        $('.screen-container.active audio').removeClass("hide");
-        $('.screen-container.active dotlottie-player').addClass("hide");
-        $('.screen-container.active button.stopRecording').addClass('hide');
+        active_screen.find('audio').removeClass("hide");
+        active_screen.find('dotlottie-player').addClass("hide");
+        active_screen.find('button.stopRecording').addClass('hide');
         // next button
         if (checkHiddenElements()) {
-            $('.screen-container.active button.next-button').removeClass("hide");
-            $('.screen-container.active button.submit-button').removeClass("hide");
+            active_screen.find('button.next-button').removeClass("hide");
+            active_screen.find('button.submit-button').removeClass("hide");
         }
     });
 })

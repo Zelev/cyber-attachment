@@ -3,6 +3,7 @@ import json
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from .models import Survey, Answer, Recording
 import uuid
 
@@ -69,11 +70,10 @@ class SurveyView(View):
             Recording.objects.filter(uuid__in=audio_uuids).update(answer=answer)
         if survey.next_survey:
             redirect_url = survey.next_survey.get_absolute_url()
-            return render(
-                request,
-                f"{FILE_PATH}/templates/survey_submit.html",
-                {"survey": redirect_url, "uuid": response_uuid, "excluded": excluded},
-            )
+            # Add uuid as a parameter to the redirect url
+            redirect_url += f"?uuid={response_uuid}"
+            # render the next survey
+            return redirect(redirect_url)
         return render(request, f"{FILE_PATH}/templates/survey_submit.html")
 
 
