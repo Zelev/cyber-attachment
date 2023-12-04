@@ -281,7 +281,7 @@ $(document).ready(function () {
         })
             .catch(error => console.error('Error:', error))
             .then(response => console.log('Success:', response));
-    }
+    })
 });
 
 function checkRecording() {
