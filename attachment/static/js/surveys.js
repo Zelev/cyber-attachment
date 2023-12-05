@@ -246,6 +246,7 @@ $(document).ready(function () {
             }
             if ($('.screen-container.active .recording-container').length > 0) {
                 $('.screen-container.active button.next-button').addClass("hide");
+                $('.screen-container.active button.submit-button').addClass("hide");
             }
         }
     });
