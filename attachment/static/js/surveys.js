@@ -1,5 +1,5 @@
 // Check if the form includes any hidden elements with the class "hidden"
-
+active_timeouts = [];
 function checkHiddenElements() {
     var hiddenElements = document.getElementsByClassName("hide");
     if (hiddenElements.length > 0) {
@@ -234,6 +234,11 @@ $(document).ready(function () {
             if (!dataValidation(screens.eq(currentScreenIndex))) {
                 return false;
             }
+            // clear timeouts
+            active_timeouts.forEach(function (timeout) {
+                clearTimeout(timeout);
+            });
+            active_timeouts = [];
             currentScreenIndex++;
             showScreen(currentScreenIndex);
             if (currentScreenIndex !== 0) {
@@ -275,7 +280,7 @@ $(document).ready(function () {
         var formData = new FormData(form[0]);
         formData.append('csrfmiddlewaretoken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
         formData.append('language', document.querySelector('input[name="language"]').value);
-        fetch(`${window.location.pathname}abandon/`, {
+        fetch(`${window.location.pathname}`, {
             method: 'POST',
             body: formData
         })
@@ -357,11 +362,12 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         active_screen.find('button.startRecording').addClass('hide');
         parent.find('dotlottie-player').removeClass("hide");
         parent.find('audio').addClass("hide");
-        setTimeout(function () {
+        // add timeout to stop recording after 60 seconds
+        active_timeouts.push(setTimeout(function () {
             active_screen.find('button.stopRecording').removeClass('hide');
             active_screen.find('button.startRecording').addClass('hide');
-        }, 20000);
-        setTimeout(function () {
+        }, 20000));
+        active_timeouts.push(setTimeout(function () {
             if (stopped) {
                 return;
             }
@@ -372,10 +378,12 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
             // next button
             if (checkHiddenElements()) {
                 parent.find('audio').removeClass("hide");
-                active_screen.find('button.next-button').removeClass("hide");
-                active_screen.find('button.submit-button').removeClass("hide");
+                setTimeout(function () {
+                    active_screen.find('button.next-button').removeClass("hide");
+                    active_screen.find('button.submit-button').removeClass("hide");
+                }, 1000);
             }
-        }, 60000); // Record for one minute
+        }, 60000)); // Record for one minute
     });
 
     stopButtons.on("click", function () {
@@ -388,8 +396,10 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         active_screen.find('button.stopRecording').addClass('hide');
         // next button
         if (checkHiddenElements()) {
-            active_screen.find('button.next-button').removeClass("hide");
-            active_screen.find('button.submit-button').removeClass("hide");
+            setTimeout(function () {
+                active_screen.find('button.next-button').removeClass("hide");
+                active_screen.find('button.submit-button').removeClass("hide");
+            }, 1000);
         }
     });
 })
