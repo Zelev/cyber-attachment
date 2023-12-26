@@ -1,3 +1,4 @@
+let checked_submit = false;
 // Check if the form includes any hidden elements with the class "hidden"
 active_timeouts = [];
 function checkHiddenElements() {
@@ -194,6 +195,7 @@ function dataValidation(current_screen) {
             // add 'excluded' = true to the form
             $('form').append('<input type="hidden" name="excluded" value="true">');
             $('form').submit();
+            checked_submit = true;
             return false;
         }
     });
@@ -263,10 +265,13 @@ $(document).ready(function () {
 
     showScreen(currentScreenIndex);
 
-    // validate form before submitting
-    $('form').on("submit", function (event) {
-        if(!dataValidation(screens.eq(currentScreenIndex))) {
-            event.preventDefault();
+    // validate form before submitting, check if invoqued with an extra bool
+
+    $('form').on("submit", checked, function (event) {
+        if (!checked_submit) {
+            if(!dataValidation(screens.eq(currentScreenIndex))) {
+                event.preventDefault();
+            }
         }
     });
 
