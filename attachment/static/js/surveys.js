@@ -267,7 +267,7 @@ $(document).ready(function () {
 
     // validate form before submitting, check if invoqued with an extra bool
 
-    $('form').on("submit", checked, function (event) {
+    $('form').on("submit", function (event) {
         if (!checked_submit) {
             if(!dataValidation(screens.eq(currentScreenIndex))) {
                 event.preventDefault();
