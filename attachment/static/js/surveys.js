@@ -194,8 +194,8 @@ function dataValidation(current_screen) {
             // submit form
             // add 'excluded' = true to the form
             $('form').append('<input type="hidden" name="excluded" value="true">');
-            $('form').submit();
             checked_submit = true;
+            $('form').submit();
             return false;
         }
     });
@@ -282,16 +282,18 @@ $(document).ready(function () {
 
     // if the user abandons the page, submit the info to the server
     window.addEventListener("beforeunload", function (e) {
-        var form = $('form');
-        var formData = new FormData(form[0]);
-        formData.append('csrfmiddlewaretoken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
-        formData.append('language', document.querySelector('input[name="language"]').value);
-        fetch(`${window.location.pathname}`, {
-            method: 'POST',
-            body: formData
-        })
-            .catch(error => console.error('Error:', error))
-            .then(response => console.log('Success:', response));
+        if(!checked_submit) {
+            var form = $('form');
+            var formData = new FormData(form[0]);
+            formData.append('csrfmiddlewaretoken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
+            formData.append('language', document.querySelector('input[name="language"]').value);
+            fetch(`${window.location.pathname}`, {
+                method: 'POST',
+                body: formData
+            })
+                .catch(error => console.error('Error:', error))
+                .then(response => console.log('Success:', response));
+        }
     })
 });
 
