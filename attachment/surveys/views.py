@@ -69,7 +69,7 @@ class SurveyView(View):
         if audio_uuids:
             Recording.objects.filter(uuid__in=audio_uuids).update(answer=answer)
         if survey.next_survey:
-            redirect_url = survey.next_survey.get_absolute_url()
+            redirect_url = f"/{language}{survey.next_survey.get_absolute_url()}"
             # Add uuid as a parameter to the redirect url
             redirect_url += f"?uuid={response_uuid}"
             # render the next survey
