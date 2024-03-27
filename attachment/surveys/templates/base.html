@@ -2,58 +2,63 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     {% load static %}
-    <title>{% block title %}{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title>
+      {% block title %}
+      {% endblock %}
+    </title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
-    <link rel="stylesheet" href="//unpkg.com/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css">
-    <link rel="stylesheet" href="//unpkg.com/videojs-record/dist/css/videojs.record.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
-    {% block head %}{% endblock %}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-</head>
-<body>
+    <link rel="stylesheet" href="//unpkg.com/videojs-wavesurfer/dist/css/videojs.wavesurfer.min.css" />
+    <link rel="stylesheet" href="//unpkg.com/videojs-record/dist/css/videojs.record.min.css" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}" />
+    {% block head %}
+    {% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
     {% load i18n %}
     {% get_available_languages as LANGUAGES %}
     {% get_language_info_list for LANGUAGES as languages %}
     {% get_current_language as LANGUAGE_CODE %}
     <header>
-        <nav>
-            <div class="nav-wrapper">
-                <ul class="left-align">
-                    {% for language in languages %}
-                        <li>
-                            {{language.code}}
-                            <a href="/{{ language.code }}{{ request.path|slice:'3:' }}" class="btn-flat btn-small {% if language.code == LANGUAGE_CODE %} disabled {% endif %}">
-                                {{ language.name_local }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <a href="" class="brand-logo center">
-                    <img src="{% static 'img/cyber-t-cor.svg' %}" alt="Cyber Master">
-                </a>
-            </div>
-        </nav>
+      <nav>
+        <div class="nav-wrapper">
+          <ul class="left-align">
+            {% for language in languages %}
+              {% if language.code == 'pt' %}
+
+              {% else %}
+                <li>
+                  {{ language.code }}
+                  <a href="/{{ language.code }}{{ request.path|slice:'3:' }}" class="btn-flat btn-small {% if language.code == LANGUAGE_CODE %}{% endif %}">{{ language.name_local }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+          <a href="" class="brand-logo center"><img src="{% static 'img/cyber-t-cor.svg' %}" alt="Cyber Master" /></a>
+        </div>
+      </nav>
     </header>
 
     <main>
-        {% block content %}
-        {% endblock %}
+      {% block content %}
+
+      {% endblock %}
     </main>
 
     <footer class="page-footer">
-        {% block footer %}
-            <div class="container">
-                <p class="center-align">Copyright 2023 UPV</p>
-            </div>
-        {% endblock %}
+      {% block footer %}
+        <div class="container">
+          <p class="center-align">Copyright 2023 UPV</p>
+        </div>
+      {% endblock %}
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
@@ -61,22 +66,23 @@
     <script src="//unpkg.com/videojs-wavesurfer/dist/videojs.wavesurfer.min.js"></script>
     <script src="//unpkg.com/videojs-record/dist/videojs.record.min.js"></script>
     <script>
-        const csrftoken = $("[name=csrfmiddlewaretoken]").val();
-        if (csrftoken) {
-          function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-            return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
-          }
-          $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-              if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-              }
-            },
-          });
+      const csrftoken = $('[name=csrfmiddlewaretoken]').val()
+      if (csrftoken) {
+        function csrfSafeMethod(method) {
+          // these HTTP methods do not require CSRF protection
+          return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method)
         }
-      </script>
+        $.ajaxSetup({
+          beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader('X-CSRFToken', csrftoken)
+            }
+          }
+        })
+      }
+    </script>
     <script src="{% static 'js/script.js' %}"></script>
-    {% block js %}{% endblock %}
-</body>
+    {% block js %}
+    {% endblock %}
+  </body>
 </html>
